@@ -2,6 +2,19 @@
 
 A professional, branded Scope of Work generator for Social Garden's marketing automation services. Features AI-powered content generation, Novel editor integration, and professional PDF export.
 
+---
+
+## 🔒 Security Alert
+
+**⚠️ IMPORTANT**: If you've accidentally shared a GitHub token or API key, see [QUICK-SECURITY-GUIDE.md](QUICK-SECURITY-GUIDE.md) for immediate action steps.
+
+For all security-related information, see:
+- [QUICK-SECURITY-GUIDE.md](QUICK-SECURITY-GUIDE.md) - Immediate incident response
+- [SECURITY.md](SECURITY.md) - Full security policy
+- [INCIDENT-RESPONSE.md](INCIDENT-RESPONSE.md) - Detailed incident documentation
+
+---
+
 ## 🚀 Quick Start (Docker - Recommended)
 
 ### Prerequisites
@@ -108,6 +121,22 @@ Update CSS variables in `styles/globals.css` for color changes.
 ### PDF Template
 Modify `pdf-service/main.py` for custom PDF layouts.
 
+## 🔒 Security Notice
+
+**⚠️ IMPORTANT**: This project handles sensitive API keys and credentials. Please review our [SECURITY.md](SECURITY.md) file before deployment.
+
+### Critical Security Requirements
+- **Never commit API keys** to the repository
+- **Never share tokens** in chat messages, issues, or pull requests
+- **Always use environment variables** for sensitive data
+- **Review the security checklist** in SECURITY.md before deployment
+
+If you accidentally expose a token or API key:
+1. **Immediately revoke it** at the provider's website
+2. Generate a new one
+3. Update your local `.env` files
+4. See [SECURITY.md](SECURITY.md) for detailed incident response procedures
+
 ## 🚀 Production Deployment
 
 ### With Docker (Recommended)
@@ -126,7 +155,7 @@ OPENROUTER_API_KEY=your-openrouter-api-key-here
 NEXT_PUBLIC_PDF_SERVICE_URL=http://localhost:8000
 ```
 
-**Note**: The OpenRouter API key is required for AI chat functionality. Get your key from [OpenRouter](https://openrouter.ai/keys). The API key has been configured in the development environment.
+**Note**: The OpenRouter API key is required for AI chat functionality. Get your key from [OpenRouter](https://openrouter.ai/keys). **NEVER commit this file or share the key publicly.**
 
 ## 📞 Support
 

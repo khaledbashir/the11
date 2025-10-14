@@ -27,6 +27,10 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
+.env.development
+.env.production
+.env.test
 
 # vercel
 .vercel
@@ -34,3 +38,23 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Security - credentials and tokens
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+secrets.json
+credentials.json
+.credentials
+token.json
+.token
+
+# IDE and editor files with potential secrets
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
