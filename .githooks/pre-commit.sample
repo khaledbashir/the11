@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Pre-commit hook to detect potential secrets and tokens
+# To enable this hook, copy it to .git/hooks/pre-commit and make it executable:
+# cp .githooks/pre-commit.sample .git/hooks/pre-commit
+# chmod +x .git/hooks/pre-commit
+
+# Colors for output
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Patterns to detect (case-insensitive)
+PATTERNS=(
+    "ghp_[A-Za-z0-9_]{36}"              # GitHub Personal Access Token
+    "gh[oprsu]_[A-Za-z0-9_]{36,}"       # GitHub tokens (various types)
+    "sk-or-v1-[A-Za-z0-9]{64,}"         # OpenRouter API key
+    "OPENROUTER_API_KEY\s*=\s*['\"]?sk-" # OpenRouter in env format
+    "aws_access_key_id\s*=\s*[A-Z0-9]{20}" # AWS Access Key
+    "-----BEGIN (RSA |DSA |EC )?PRIVATE KEY-----" # Private keys
+    "Bearer [A-Za-z0-9\-_=]+\.[A-Za-z0-9\-_=]+\.?" # JWT tokens
+)
+
+# Files to check
+FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+# Check if there are any files to check
+if [ -z "$FILES" ]; then
+    exit 0
+fi
+
+# Flag for detected secrets
+SECRETS_FOUND=0
+
+echo "🔍 Checking for potential secrets in staged files..."
+
+for FILE in $FILES; do
+    # Skip binary files
+    if file "$FILE" | grep -q "binary"; then
+        continue
+    fi
+    
+    # Check each pattern
+    for PATTERN in "${PATTERNS[@]}"; do
+        # Use git show to get the staged content
+        if git diff --cached "$FILE" | grep -qiE "$PATTERN"; then
+            echo -e "${RED}❌ Potential secret detected in: $FILE${NC}"
+            echo -e "${YELLOW}   Pattern matched: $PATTERN${NC}"
+            SECRETS_FOUND=1
+        fi
+    done
+done
+
+# If secrets were found, prevent commit
+if [ $SECRETS_FOUND -eq 1 ]; then
+    echo ""
+    echo -e "${RED}========================================${NC}"
+    echo -e "${RED}🚨 COMMIT BLOCKED: Potential secrets detected!${NC}"
+    echo -e "${RED}========================================${NC}"
+    echo ""
+    echo "Please:"
+    echo "1. Remove sensitive data from the staged files"
+    echo "2. Use environment variables instead"
+    echo "3. Review SECURITY.md for best practices"
+    echo ""
+    echo "If this is a false positive, you can bypass this check with:"
+    echo "  git commit --no-verify"
+    echo ""
+    exit 1
+fi
+
+echo "✅ No secrets detected in staged files"
+exit 0
