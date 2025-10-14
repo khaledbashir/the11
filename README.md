@@ -2,6 +2,19 @@
 
 A professional, branded Scope of Work generator for Social Garden's marketing automation services. Features AI-powered content generation, Novel editor integration, and professional PDF export.
 
+---
+
+## 🔒 Security Alert
+
+**⚠️ IMPORTANT**: If you've accidentally shared a GitHub token or API key, see [QUICK-SECURITY-GUIDE.md](QUICK-SECURITY-GUIDE.md) for immediate action steps.
+
+For all security-related information, see:
+- [QUICK-SECURITY-GUIDE.md](QUICK-SECURITY-GUIDE.md) - Immediate incident response
+- [SECURITY.md](SECURITY.md) - Full security policy
+- [INCIDENT-RESPONSE.md](INCIDENT-RESPONSE.md) - Detailed incident documentation
+
+---
+
 ## 🚀 Quick Start (Docker - Recommended)
 
 ### Prerequisites
