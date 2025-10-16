@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Model Selector Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .test-container {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .model-item {
+            padding: 5px;
+            margin: 2px 0;
+            background: #f5f5f5;
+            border-radius: 3px;
+        }
+        .matched {
+            background: #e6f3ff;
+            border: 1px solid #4c9aff;
+        }
+        input {
+            padding: 8px;
+            width: 300px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Model Selector Search</h1>
+    
+    <div class="test-container">
+        <h3>Test the search functionality:</h3>
+        <input type="text" id="searchInput" placeholder="Type to search models..." />
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Test models data (same as what we added to the fallback)
+        const models = [
+            { id: "anthropic/claude-3.5-sonnet", name: "Claude 3.5 Sonnet" },
+            { id: "openai/gpt-4o", name: "GPT-4o" },
+            { id: "openai/gpt-4-turbo", name: "GPT-4 Turbo" },
+            { id: "google/gemini-pro", name: "Google Gemini Pro" },
+            { id: "google/gemini-ultra", name: "Google Gemini Ultra" },
+            { id: "meta/llama-3-70b", name: "Llama 3 70B" },
+            { id: "mistral/mistral-large", name: "Mistral Large" },
+            { id: "z-ai/glm-4.5-air:free", name: "GLM-4.5 Air (Free)" },
+            { id: "cohere/command-r-plus", name: "Command R+" },
+            { id: "perplexity/sonar-medium", name: "Sonar Medium" },
+        ];
+
+        function filterModels(models, query) {
+            if (!query.trim()) return models;
+            
+            const searchQuery = query.toLowerCase().trim();
+            
+            return models.filter(model => {
+                const name = model.name.toLowerCase();
+                const id = model.id.toLowerCase();
+                
+                // Exact match
+                if (name === searchQuery || id === searchQuery) return true;
+                
+                // Contains match
+                if (name.includes(searchQuery) || id.includes(searchQuery)) return true;
+                
+                // Word boundary match
+                const nameWords = name.split(/\s+/);
+                const idWords = id.split(/[:_-]/);
+                if (nameWords.some(word => word.startsWith(searchQuery)) || 
+                    idWords.some(word => word.startsWith(searchQuery))) return true;
+                
+                return false;
+            });
+        }
+
+        function updateResults() {
+            const query = document.getElementById('searchInput').value;
+            const filtered = filterModels(models, query);
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            filtered.forEach(model => {
+                const div = document.createElement('div');
+                div.className = 'model-item';
+                if (query && (model.name.toLowerCase().includes(query.toLowerCase()) || 
+                             model.id.toLowerCase().includes(query.toLowerCase()))) {
+                    div.className += ' matched';
+                }
+                div.innerHTML = `<strong>${model.name}</strong><br><small>${model.id}</small>`;
+                resultsDiv.appendChild(div);
+            });
+            
+            if (filtered.length === 0) {
+                resultsDiv.innerHTML = '<div class="model-item">No models found</div>';
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', updateResults);
+        
+        // Initial load
+        updateResults();
+    </script>
+</body>
+</html>
+```
